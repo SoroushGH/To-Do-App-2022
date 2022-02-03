@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import TodoFrom from "./components/TodoFrom";
+import TodoList from "./components/TodoList";
+
+const todoListItems = [{todoItem: 'Buy a book', id: 12345}];
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [todoListItemUpdate, setTodoListItemUpdate] = useState(todoListItems);
+
+    const getInputFromFormHandler = (todoItem) => {
+        setTodoListItemUpdate((previousItems) => {
+            return [todoItem, ...previousItems];
+        });
+    };
+
+    const getItemidToRemoveHandler = (itemId) => {
+        setTodoListItemUpdate((currentToDoItems) => {
+            const filteredItems = currentToDoItems.filter(
+                (item) => item.id !== itemId
+            );
+            return filteredItems;
+        });
+    };
+
+    return (
+        <div className="App">
+            <TodoFrom getInputFromForm={getInputFromFormHandler} />
+            <TodoList
+                sendTodoItemToRender={todoListItemUpdate}
+                getItemidToRemove={getItemidToRemoveHandler}
+            />
+        </div>
+    );
 }
 
 export default App;
